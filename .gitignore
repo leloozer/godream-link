@@ -1,0 +1,4 @@
+# Rien à ignorer : ce dépôt est une page statique, publique par conception, et
+# ne doit contenir aucun secret ni artefact de build. Ce fichier existe pour le
+# dire — et pour que personne n'y ajoute un `node_modules` un jour.
+.DS_Store

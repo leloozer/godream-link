@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy — GoDream</title>
+<!-- GÉNÉRÉ PAR tool/gen_legal_html.py DEPUIS L'APP — NE PAS ÉDITER À LA MAIN.
+     Le texte de référence est lib/features/settings/legal_screen.dart : les
+     stores comparent cette page à ce que l'app affiche, et un écart entre les
+     deux est un motif de retour en revue. -->
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="doc">
+<main>
+  <p class="nav"><a href="./">Back</a> · <a href="confidentialite.html">Français</a></p>
+  <h1>Privacy</h1>
+  <p class="updated">Updated 23 August 2026</p>
+    <p>GoDream is local-first: your dream, your steps and your streak live on your phone. This document says what leaves it, when, and where to — without vague wording.</p>
+    <h2>What stays on your phone</h2>
+    <p>Everything, by default: your dream, your why, the list of your micro-actions, what you did and when, your streak, the time of your daily appointment. Without an account, none of it leaves the device — and ticking "done" never waits for the network.</p>
+    <h2>What leaves, and why</h2>
+    <p>Your dream text and, if you filled it in, your why are sent once to our server, just long enough to break that dream into micro-actions. The breakdown is done by an Anthropic model (Claude), which therefore receives that text. Neither Anthropic nor we use it to train a model. If you ask for an action to be broken down further because it felt too hard, the same round trip happens for that action.</p>
+    <h2>If you create an account</h2>
+    <p>Your e-mail address (or the identifier returned by Google or Apple) and your dreams are then backed up with our database host, Supabase, in the European Union. Row-level access rules mean only your account can read your data. An account is optional: the app works entirely without one, and "Later" blocks nothing.</p>
+    <h2>Usage measurement</h2>
+    <p>The app records usage events — the app was opened, an action was done, onboarding was finished — sent to PostHog, on its European servers. They serve one question only: do people come back to do their micro-action? They never contain your dream text. You can turn this measurement off entirely in Settings → Privacy, and the app keeps working exactly the same.</p>
+    <h2>What we do not do</h2>
+    <p>No advertising, no ad network, no advertising profile, no cross-app tracking identifier (no IDFA). Your data is neither sold nor rented, and goes to no data broker.</p>
+    <h2>Subscription</h2>
+    <p>Payments are handled by the App Store or Google Play, through RevenueCat. GoDream never sees your payment details: we only receive whether your subscription is active.</p>
+    <h2>Reminders</h2>
+    <p>The daily reminder is a local notification, scheduled by your phone. It is not sent from a server and tells us nothing.</p>
+    <h2>Deleting your data</h2>
+    <p>"Delete this dream" (Settings) permanently erases that dream, its steps and its streak, on the device and on the server if you have an account. "Delete my account" (Settings) erases the account and everything attached to it server-side; this is irreversible. Uninstalling the app is enough to erase what is local.</p>
+    <h2>Your rights</h2>
+    <p>You can request access to your data, its correction, its deletion or its portability by writing to contact@godream.app. You may also lodge a complaint with your national data protection authority (in France, the CNIL).</p>
+    <h2>Contact</h2>
+    <p>For any question about your data: contact@godream.app.</p>
+</main>
+</body>
+</html>

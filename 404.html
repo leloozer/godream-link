@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoDream</title>
+<!-- Volontairement **pas** une copie d'index.html.
+     `thehiddenside-link` en fait une copie complète parce que ses partages
+     utilisent des chemins variés (`/go`, `/s/story_12`). Ici, `AppLinks.shareLink`
+     ne produit qu'une seule forme — la racine avec `?s=` — donc cette page n'a
+     qu'un travail : rattraper une URL malformée sans perdre le canal. Une copie
+     aurait voulu dire deux fichiers à tenir en phase, et le tracé de la marque
+     dupliqué. -->
+<link rel="stylesheet" href="style.css">
+<script>
+  // Le `?s=` est conservé : c'est lui qui attribue l'install. Le perdre ici
+  // transformerait un partage mesuré en visite anonyme.
+  location.replace('./' + (location.search || ''));
+</script>
+</head>
+<body class="landing">
+<main>
+  <p class="tagline">Redirection…</p>
+  <p class="soon"><a href="./">Aller à la page d'accueil</a></p>
+</main>
+</body>
+</html>

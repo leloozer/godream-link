@@ -1,0 +1,123 @@
+/* Les tokens viennent de lib/core/palette.dart, à la valeur près : quelqu'un qui
+   arrive ici depuis un partage puis installe l'app doit voir la même chose deux
+   fois. Un site presque de la bonne couleur se remarque plus qu'un site
+   franchement différent. */
+:root {
+  color-scheme: dark;
+  --bg: #0C0A14;
+  --surface: #16131F;
+  --stroke: #2C2739;
+  --ink: #F3F1FA;
+  --muted: #8B85A3;
+  --faint: #6D6784;
+  --accent: #8B7BFF;
+  --star: #FFC24B;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── La page d'arrivée d'un partage ─────────────────────────────────────── */
+body.landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+body.landing main { max-width: 420px; width: 100%; }
+
+.mark { width: 72px; height: 72px; margin: 0 auto 28px; display: block; }
+
+h1 { font-size: 26px; font-weight: 800; line-height: 1.2; margin: 0 0 12px; }
+
+.tagline {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0 0 32px;
+}
+
+a.store {
+  display: block;
+  padding: 15px 20px;
+  margin: 10px 0;
+  background: var(--star);
+  color: #1A1305;
+  text-decoration: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+a.store.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--stroke);
+}
+
+/* Affiché tant qu'aucun store n'est en ligne. Pas de bouton grisé : un bouton
+   qui ne fait rien est pire qu'une phrase qui le dit. */
+.soon {
+  padding: 16px 20px;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.legal {
+  margin-top: 36px;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+.legal a { color: var(--faint); }
+
+/* ── Les pages légales ──────────────────────────────────────────────────── */
+body.doc { padding: 32px 20px 64px; }
+
+body.doc main {
+  max-width: 680px;
+  margin: 0 auto;
+  /* 68 caractères environ : au-delà, l'œil perd sa ligne, et ces pages sont
+     déjà assez pénibles à lire. */
+}
+
+body.doc h1 { font-size: 28px; margin: 8px 0 4px; }
+
+body.doc h2 {
+  font-size: 17px;
+  font-weight: 800;
+  margin: 32px 0 8px;
+  color: var(--ink);
+}
+
+body.doc p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+body.doc .nav, body.doc .updated {
+  font-size: 13px;
+  color: var(--faint);
+  margin: 0 0 8px;
+}
+
+body.doc a { color: var(--accent); }
+
+@media (min-width: 640px) {
+  body.doc { padding-top: 56px; }
+}

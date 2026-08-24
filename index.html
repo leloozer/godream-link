@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoDream — ton rêve d'enfant, 15 minutes à la fois</title>
+<meta name="description" content="Ton rêve d'enfant, découpé en micro-actions. Une par jour, quinze minutes, et il avance vraiment.">
+
+<!-- L'aperçu affiché dans WhatsApp, iMessage, Discord… vient de CES balises,
+     pas de la fiche du store : c'est tout le gain par rapport au partage d'un
+     lien store brut. Les robots des messageries n'exécutent pas de JavaScript,
+     ils ne lisent que cet en-tête — la redirection ne les gêne pas. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="GoDream">
+<meta property="og:description" content="Ton rêve d'enfant, découpé en micro-actions. Une par jour, quinze minutes.">
+<meta property="og:image" content="https://leloozer.github.io/godream-link/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body class="landing">
+<main>
+  <!-- Le vrai tracé de la marque, copié d'assets/brand/godream-mark.svg — pas
+       une approximation dessinée pour le web. Le signe dit quelque chose : trois
+       points qui grandissent en montant (les micro-actions, qui s'accumulent et
+       accélèrent comme une série), puis l'étoile (le rêve). L'or ne sert qu'à ce
+       qui est gagné, ici comme dans l'app, et c'est ce qui l'empêche de perdre
+       sa valeur. -->
+  <svg class="mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GoDream">
+    <rect width="512" height="512" rx="120" fill="#8B7BFF"/>
+    <path d="M 91.2 398.2 L 196.7 346.9 L 308.2 276.6 L 381.6 180.1" stroke="#0C0A14" stroke-width="13.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="91.2" cy="398.2" r="22.1" fill="#0C0A14"/>
+    <circle cx="196.7" cy="346.9" r="31.1" fill="#0C0A14"/>
+    <circle cx="308.2" cy="276.6" r="42.2" fill="#0C0A14"/>
+    <path d="M 381.6 91.7 Q 387.1 172.2 442.9 180.1 Q 387.1 188.1 381.6 268.6 Q 376.1 188.1 320.3 180.1 Q 376.1 172.2 381.6 91.7 Z" fill="#0C0A14"/>
+    <circle cx="381.6" cy="180.1" r="20.8" fill="#FFC24B"/>
+  </svg>
+
+  <h1>Ton rêve d'enfant,<br>15 minutes à la fois.</h1>
+  <p class="tagline">
+    Écris-le une fois. On le découpe en micro-actions,
+    et tu n'as plus qu'à en faire une par jour.
+  </p>
+
+  <!-- Les deux liens sont la version sans JavaScript : ils restent valides si le
+       script ne s'exécute pas, et servent d'affichage sur ordinateur.
+       `smartlink.js` les masque tant que le store correspondant n'existe pas. -->
+  <a class="store" id="ios" href="#" hidden>Télécharger sur l'App Store</a>
+  <a class="store secondary" id="play" href="#" hidden>Télécharger sur Google Play</a>
+
+  <p class="soon" id="soon">
+    GoDream arrive bientôt sur l'App Store et Google Play.
+  </p>
+
+  <p class="legal">
+    <a href="confidentialite.html">Confidentialité</a> ·
+    <a href="conditions.html">Conditions d'utilisation</a><br>
+    <a href="privacy.html">English</a>
+  </p>
+</main>
+
+<!-- Chargé AVANT `smartlink.js` : celui-ci envoie son événement puis redirige
+     dans la foulée, il faut donc que la file d'attente de PostHog existe déjà. -->
+<script src="posthog.js"></script>
+<script src="smartlink.js"></script>
+</body>
+</html>
