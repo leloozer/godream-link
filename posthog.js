@@ -1,46 +1,77 @@
-// Mesure de cette page — **inactive pour l'instant, et c'est délibéré.**
+// Mesure de cette page : un comptage anonyme, envoyé directement à PostHog.
 //
-// Ce fichier existe vide plutôt que d'être absent : `index.html` le charge avant
-// `smartlink.js`, et `smartlink.js` ne mesure que si `window.posthog` existe.
-// Le laisser vide rend donc la page silencieuse sans qu'aucune ligne d'appel
-// n'ait à changer le jour où on l'active.
+// ── Ce que la mesure apporte ────────────────────────────────────────────────
 //
-// ── Pourquoi ce n'est pas encore branché ────────────────────────────────────
+// Le maillon manquant de la boucle virale et des réseaux sociaux. L'app sait
+// combien de pas sont partagés (`share_completed`) et combien de gens l'ouvrent
+// (`app_opened`), mais entre les deux personne ne comptait les clics — ni ceux
+// d'un partage, ni ceux d'un lien en bio Instagram ou TikTok (`?s=ig-bio`…).
+// Sans ce chiffre, un partage qui ne convertit pas est indiscernable d'un
+// partage que personne n'a cliqué — et ce sont deux problèmes opposés : le
+// premier se corrige sur la fiche du store, le second sur le texte du partage.
 //
-// Deux raisons, dans cet ordre.
+// ── Pourquoi pas le SDK, et pourquoi pas de bannière ────────────────────────
 //
-// 1. **Il n'y a pas encore de projet PostHog.** `POSTHOG_KEY` est vide côté app
-//    aussi (`lib/core/config.dart`), et `tool/build_release.sh` refuse de
-//    builder une release sans. Mettre une clé bidon ici serait le placeholder en
-//    production que tout ce dépôt s'interdit.
+// Le SDK se charge en asynchrone ; or la page redirige vers le store dans la
+// milliseconde. Sur mobile, il n'a jamais le temps de s'exécuter : ses appels
+// partent avec la page, c'est-à-dire nulle part. Un `sendBeacon` direct, lui,
+// est remis au navigateur et part même si la page disparaît.
 //
-// 2. **Cette page est publique et hors de l'app.** Un traceur tiers sur une page
-//    web accessible depuis l'UE demande un consentement préalable — donc une
-//    bannière. L'app, elle, a son interrupteur de refus dans les Réglages, ce
-//    qui est une autre situation juridique. Activer la mesure ici sans bannière
-//    serait contredire la politique de confidentialité que ce même site publie
-//    deux liens plus bas.
+// Et ce n'est pas un traceur : ni cookie, ni stockage local, ni identifiant
+// conservé, ni profil de personne (`$process_person_profile: false`). Un
+// identifiant tiré au hasard à chaque événement, le canal, la plateforme, le
+// domaine d'origine seul. Deux clics d'une même personne ne peuvent pas être
+// reliés. C'est ce qui permet de compter sans bannière — un visiteur redirigé
+// aussitôt n'aurait de toute façon jamais pu y répondre —, et c'est ce que dit
+// la page de confidentialité. Pour que PostHog ne garde pas non plus l'adresse
+// IP : activer « Discard client IP data » dans les réglages du projet.
 //
-// ── Ce que la mesure apporterait ────────────────────────────────────────────
+// ── Comment les autres scripts s'en servent ─────────────────────────────────
 //
-// Le maillon manquant de la boucle virale. L'app sait combien de pas sont
-// partagés (`share_completed`) et combien de gens l'ouvrent (`app_opened`), mais
-// entre les deux personne ne compte les clics. Sans ce chiffre, un partage qui
-// ne convertit pas est indiscernable d'un partage que personne n'a cliqué — et
-// ce sont deux problèmes opposés : le premier se corrige sur la fiche du store,
-// le second sur le texte du partage.
+// `smartlink.js` et `popularity.js` appellent `window.posthog.capture(…)` s'il
+// existe. Ce fichier en fournit un, qui passe par le comptage anonyme : aucune
+// ligne d'appel n'a eu à changer. Chargé AVANT eux (voir `index.html`).
 //
-// ── Pour l'activer ──────────────────────────────────────────────────────────
-//
-// 1. Créer le projet PostHog (cloud **UE** — l'app force déjà
-//    `https://eu.i.posthog.com`, et un projet créé sur le cloud US reçoit des
-//    événements qui n'apparaissent jamais).
-// 2. Ajouter une bannière de consentement, et ne charger le SDK qu'après accord.
-// 3. Remplacer ce fichier par l'extrait officiel du SDK web, avec la même clé de
-//    projet que l'app : la page et l'app doivent vivre dans le même entonnoir,
-//    sinon « partages → clics → installs → première action » ne se lit nulle
-//    part.
-//
-// GitHub Pages ne fournit aucune statistique de trafic, donc il n'y a pas de
-// solution de repli côté hébergeur. L'alternative sans traceur est Cloudflare
-// Pages (gratuit, statistiques agrégées incluses, sans cookie).
+// Projet PostHog : `GoDream` (298977, cloud UE), le même que l'app, pour que
+// « partages → clics → installs → première action » se lise dans un seul projet.
+(function () {
+  // Clé de projet publique par nature : elle ne permet que d'écrire des
+  // événements, jamais d'en lire. ⚠️ Cloud UE : une mauvaise région n'échoue
+  // pas bruyamment, les événements partent et n'arrivent jamais.
+  var KEY = 'phc_tJGNk7aM8JnHSvhm8nnQSRR2e9NeVdRbVtYtKF8JLWEi';
+  var ENDPOINT = 'https://eu.i.posthog.com/i/v0/e/';
+
+  var randomId = function () {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'v-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+  };
+
+  // Le domaine seul (instagram.com, l.tiktok.com…), jamais l'adresse complète.
+  var hostOf = function (url) {
+    try { return url ? new URL(url).hostname : undefined; } catch (e) { return undefined; }
+  };
+
+  // Ne lève jamais d'exception : un bloqueur de publicité peut refuser
+  // l'envoi, et aucun problème de mesure ne doit empêcher quelqu'un d'arriver
+  // sur le store.
+  var count = function (event, props) {
+    try {
+      var properties = { $process_person_profile: false, $lib: 'smartlink' };
+      for (var k in props) if (props[k] !== undefined) properties[k] = props[k];
+      if (properties.referrer) properties.referrer = hostOf(properties.referrer);
+      var body = JSON.stringify({
+        api_key: KEY, event: event, distinct_id: randomId(),
+        timestamp: new Date().toISOString(), properties: properties
+      });
+      // `text/plain` : seul type que `sendBeacon` envoie sans requête préalable
+      // (CORS). PostHog lit le JSON quel que soit le type annoncé.
+      if (navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, new Blob([body], { type: 'text/plain' }))) return;
+      // Repli : `keepalive` survit lui aussi à la navigation.
+      fetch(ENDPOINT, { method: 'POST', body: body, keepalive: true, mode: 'no-cors', headers: { 'Content-Type': 'text/plain' } });
+    } catch (e) { /* la mesure ne doit jamais bloquer une redirection */ }
+  };
+
+  // Le troisième argument des appelants (`{ transport: 'sendBeacon' }`) est
+  // ignoré : l'envoi passe toujours par le beacon.
+  window.posthog = { capture: function (event, props) { count(event, props); } };
+})();
